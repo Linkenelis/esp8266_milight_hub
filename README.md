@@ -1,13 +1,17 @@
 # TODO's for ESP32
 
-- Implement handleFirmwarePost() and handleFirmwareUpload() in MiLightHttpServer.cpp
-- Erase config in MiLightHttpServer.cpp
-- Wifi set hostname in main.cpp
-- Set Wifi physical (setPhyMode) in main.cpp
-- SSDP (Service discovery) support in main.cpp
-- LED callback in WiFiManager loop in main.cpp
+- This works (nothing changed); Implement handleFirmwarePost() and handleFirmwareUpload() in MiLightHttpServer.cpp
+- Done; Erase config in MiLightHttpServer.cpp
+- Done; Wifi set hostname in main.cpp
+- Sort of done; no option for this in ESP32; note on web page 8266 only (script.js);  Set Wifi physical (setPhyMode) in main.cpp
+- Done; SSDP (Service discovery) support in main.cpp
+- Why is this needed? LED works just fine; LED callback in WiFiManager loop in main.cpp
 - Implement other TODO's in main.cpp
-- Reset reason in AboutHelper.cpp
+- (added Zer0x00 solution); Reset reason in AboutHelper.cpp
+- build_flags =
+  ;!python3 .get_version.py     ;I have to comment this out as it gives an error, must be my setup
+- line 8 in GroupStatePersistance; static const char FILE_PREFIX[] = "/group_states/";   //added a /; otherwise we get  "[E][vfs_api.cpp:27] open(): group_states/3000201 does not start with /" was static const char FILE_PREFIX[] = "group_states/";
+- added [env:ttgo-t7-v14-mini32]
 
 # esp8266_milight_hub [![Build Status](https://travis-ci.org/sidoh/esp8266_milight_hub.svg?branch=master)](https://travis-ci.org/sidoh/esp8266_milight_hub) [![License][shield-license]][info-license]
 

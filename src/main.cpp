@@ -33,6 +33,7 @@
 #elif ESP32
   #include <SPIFFS.h>
   #include <ESPmDNS.h>
+  #include <ESP32SSDP.h>    //from https://github.com/luc-github/ESP32SSDP ESP8266SSDP converted to ESP32, compatable
 #endif
 
 #include <vector>
@@ -283,23 +284,31 @@ void applySettings() {
     ledStatus->continuous(settings.ledModeOperating);
   }
 
-  // WiFi.hostname(settings.hostname);
+  #ifdef ESP8266
+    WiFi.hostname(settings.hostname);
+  #elif ESP32
+    WiFi.setHostname(settings.hostname.c_str());
+  #endif
 
-  // WiFiPhyMode_t wifiMode;
-  // switch (settings.wifiMode) {
-  //   case WifiMode::B:
-  //     wifiMode = WIFI_PHY_MODE_11B;
-  //     break;
-  //   case WifiMode::G:
-  //     wifiMode = WIFI_PHY_MODE_11G;
-  //     break;
-  //   default:
-  //   case WifiMode::N:
-  //     wifiMode = WIFI_PHY_MODE_11N;
-  //     break;
-  // }
-  // WiFi.setPhyMode(wifiMode);
+  #ifdef ESP8266
+      WiFiPhyMode_t wifiMode;
+      switch (settings.wifiMode)
+      {
+      case WifiMode::B:
+        wifiMode = WIFI_PHY_MODE_11B;
+        break;
+      case WifiMode::G:
+        wifiMode = WIFI_PHY_MODE_11G;
+        break;
+      default:
+      case WifiMode::N:
+        wifiMode = WIFI_PHY_MODE_11N;
+        break;
+      }
+      WiFi.setPhyMode(wifiMode);
+  #endif
 }
+
 
 /**
  *
@@ -338,7 +347,11 @@ void onGroupDeleted(const BulbId& id) {
 }
 
 void setup() {
-  Serial.begin(9600);
+  #ifdef ESP8266
+    Serial.begin(9600);   
+  #elif ESP32
+    Serial.begin(115200);
+  #endif
 
   String ssid = "ESP" + String(getESPId());
 
@@ -438,17 +451,17 @@ void setup() {
 
   MDNS.addService("http", "tcp", 80);
 
-#ifdef ESP8266
   SSDP.setSchemaURL("description.xml");
   SSDP.setHTTPPort(80);
-  SSDP.setName("ESP8266 MiLight Gateway");
-  SSDP.setSerialNumber(ESP.getChipId());
+  #ifdef ESP8266
+    SSDP.setName("ESP8266 MiLight Gateway");
+  #elif ESP32
+    SSDP.setName("ESP32 MiLight Gateway");
+  #endif
+  SSDP.setSerialNumber(getESPId());
   SSDP.setURL("/");
   SSDP.setDeviceType("upnp:rootdevice");
   SSDP.begin();
-#elif ESP32
-  // TODO SSDP
-#endif
 
 
   httpServer = new MiLightHttpServer(settings, milightClient, stateStore, packetSender, radios, transitions);

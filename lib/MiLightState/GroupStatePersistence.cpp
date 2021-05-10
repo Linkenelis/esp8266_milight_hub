@@ -5,7 +5,7 @@
   #include <SPIFFS.h>
 #endif
 
-static const char FILE_PREFIX[] = "group_states/";
+static const char FILE_PREFIX[] = "/group_states/";   //added a /; otherwise we get  "[E][vfs_api.cpp:27] open(): group_states/3000201 does not start with /"
 
 void GroupStatePersistence::get(const BulbId &id, GroupState& state) {
   char path[30];

@@ -83,8 +83,8 @@ var UI_FIELDS = [ {
     tab: "tab-wifi"
   }, {
     tag: "wifi_mode",
-    friendly: "WiFi Mode",
-    help: "Try using G mode if you're having stability problems",
+    friendly: "WiFi Mode (for ESP8266 only)",
+    help: "Try using G mode if you're having stability problems (Only ESP8266, not for ESP32)",
     type: "option_buttons",
     options: {
       'b': 'B',

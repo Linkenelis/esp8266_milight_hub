@@ -129,11 +129,12 @@ void MiLightHttpServer::handleSystemPost(RequestContext& request) {
         server.send_P(200, TEXT_PLAIN, PSTR("true"));
 
         delay(100);
-#ifdef ESP8266
-        ESP.eraseConfig();
-#elif ESP32
-        // TODO erase config
-#endif
+        #ifdef ESP8266
+          ESP.eraseConfig();
+        #elif ESP32
+          WiFi.disconnect(true, true);
+          delay(1000);
+        #endif
         delay(100);
         ESP.restart();
 
@@ -280,6 +281,7 @@ void MiLightHttpServer::handleFirmwareUpload() {
   }
   yield();
 #elif ESP32
+  
   // TODO implement firmware upload
 #endif
 }
